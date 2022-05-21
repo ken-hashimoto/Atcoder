@@ -1,40 +1,36 @@
-import pprint
+import sys
 from collections import deque
+input = sys.stdin.readline
+#入力
 H,W = map(int,input().split())
-r_s,c_s = map(lambda x:int(x)-1,input().split())
-r_t,c_t = map(lambda x:int(x)-1,input().split())
-TURN_CNT = [[10**9]*W for _ in range(H)]
-Grid = []
-for i in range(H):
-  S = input()
-  Grid.append(S)
-#求めるのはTURN_CNT[r_t][c_t]
-TURN_CNT[r_s][c_s] = 0
+r_s,c_s = [int(t) - 1 for t in input().split()]
+r_t,c_t = [int(t) - 1 for t in input().split()]
+TURN_CNT = [[[10**6+1]*4 for j in range(W)] for k in range(H)]
+Grid = [input() for _ in range(H)]
+#01BFS
 que = deque()
-que.append((r_s,c_s,'|'))
-que.append((r_s,c_s,'-'))
+for i in range(4):
+  TURN_CNT[r_s][c_s][i] = 0
+  que.append((r_s,c_s,i))
+dx = (1,-1,0,0)
+dy = (0,0,1,-1)
 while que:
-  i, j, vec = que.popleft()
-  for next_i,next_j in ((i+1,j),(i-1,j)):
-    if not (0 <= next_i < H and 0 <= next_j < W):
-      continue
-    if Grid[next_i][next_j] == "#":
-      continue
-    if vec == '|' and TURN_CNT[next_i][next_j] > TURN_CNT[i][j]:
-      TURN_CNT[next_i][next_j] = TURN_CNT[i][j]
-      que.appendleft((next_i,next_j,'|'))
-    if vec == '-' and TURN_CNT[next_i][next_j] > TURN_CNT[i][j] + 1:
-      TURN_CNT[next_i][next_j] = TURN_CNT[i][j] + 1
-      que.append((next_i,next_j,'|'))
-  for next_i,next_j in ((i,j+1),(i,j-1)):
-    if not (0 <= next_i < H and 0 <= next_j < W):
-      continue
-    if Grid[next_i][next_j] == "#":
-      continue
-    if vec == '|' and TURN_CNT[next_i][next_j] > TURN_CNT[i][j] + 1:
-      TURN_CNT[next_i][next_j] = TURN_CNT[i][j] + 1
-      que.append((next_i,next_j,'-'))
-    if vec == '-' and TURN_CNT[next_i][next_j] > TURN_CNT[i][j]:
-      TURN_CNT[next_i][next_j] = TURN_CNT[i][j]
-      que.appendleft((next_i,next_j,'-'))
-print(TURN_CNT)
+  i, j, v = que.popleft() #vは今向いている方向
+  ni = i + dx[v]
+  nj = j + dy[v]
+  if (not (0 <= ni < H and 0 <= nj < W)) or Grid[ni][nj] == '#':
+    continue
+  if TURN_CNT[ni][nj][v] > TURN_CNT[i][j][v]:
+    TURN_CNT[ni][nj][v] = TURN_CNT[i][j][v]
+    que.appendleft((ni,nj,v)) #コスト0なら先頭に
+  for nv in range(4): #方向転換について
+    if TURN_CNT[ni][nj][nv] > TURN_CNT[ni][nj][v] + 1:
+      TURN_CNT[ni][nj][nv] = TURN_CNT[ni][nj][v] + 1
+      que.append((ni,nj,nv)) #コストが増えるなら末尾に
+#出力
+#min(ans[r_t][c_t])よりこっちの方が高速らしい
+ans = 10**7
+for i in range(4):
+  if ans > TURN_CNT[r_t][c_t][i]:
+    ans = TURN_CNT[r_t][c_t][i]
+print(ans)
