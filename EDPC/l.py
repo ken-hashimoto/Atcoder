@@ -1,6 +1,6 @@
 N = int(input())
 A = list(map(int,input().split()))
-#dp[l][r] = (A[l:r]のときの答え、左半開区間となってることに注意)
+#dp[l][r] = (A[l:r]のときの答え、半開区間となってることに注意)
 dp = [[0]*(N+1) for _ in range(N+1)]
 for w in range(1,N+1):
   for l in range(N-w+1):
