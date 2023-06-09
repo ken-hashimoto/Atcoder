@@ -1,0 +1,57 @@
+{
+	"input some integers in line": {
+		"prefix": "mi()",
+		"body": [
+			"map(int,input().split())",
+			"$0"
+		],
+		"description": "input some integers in line"
+	},
+	"input integers list in line": {
+		"prefix": "li()",
+		"body": [
+			"list(map(int,input().split()))",
+			"$0"
+		],
+		"description": "input integers list in line"
+	},
+	"input integers list": {
+		"prefix": "lli()",
+		"body": [
+			"[list(map(int, input().split())) for _ in range(n)]",
+			"$0"
+		],
+		"description": "input integers list in line"
+	},
+	"input integer": {
+		"prefix": "ii()",
+		"body": [
+			"int(input())",
+			"$0"
+		],
+		"description": "input integers list in line"
+	},
+		"dfs": {
+		"prefix": "dfs",
+		"body": [
+			"def dfs(now,graph,seen):",
+  			"  #行きがけ順の処理はここ",
+  			"  for nv in graph[now]:",
+    			"    if seen[nv]:",
+      			"      continue",
+    			"    seen[nv] = True",
+    			"    dfs(nv,graph,seen)",
+  			"  #帰りがけ順の処理はここ"
+		],
+		"description": "input integers list in line"
+	},
+	"setrecursion":{
+		"prefix": "setrecursion",
+		"body":[
+			"import sys",
+			"sys.setrecursionlimit(10**7)",
+			"$0"
+		],
+		"description": "setrecursionlimit"
+	}
+}
